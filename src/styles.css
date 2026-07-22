@@ -823,3 +823,26 @@ body {
     max-width: 400px;
   }
 }
+
+@media (max-width: 640px) {
+  /* .form-group is a row flexbox (label + yes/no buttons + nested
+     question side by side) which works on desktop but forces horizontal
+     overflow on narrow phone screens — stack everything vertically instead. */
+  .form-group {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .nested-question,
+  .hours-input {
+    margin-left: 0;
+  }
+
+  .app-header {
+    padding: 16px;
+  }
+
+  .app-content {
+    padding: 16px;
+  }
+}
