@@ -71,19 +71,22 @@ export default function Dashboard({ date, entry, onSave, todayDate }) {
   };
 
   const handleApply = () => {
+    // If the main question is "Не", any sub-answer typed earlier (before
+    // switching away from "Да") must not be saved — otherwise stale hours/
+    // pages/amounts sneak into totals for a day where the answer is "No".
     const dataToSave = {
       gym: formData.gym ? 1 : 0,
       cardio: formData.cardio ? 1 : 0,
       faculty: formData.faculty ? 1 : 0,
-      faculty_hours: Number(formData.faculty_hours) || 0,
+      faculty_hours: formData.faculty ? (Number(formData.faculty_hours) || 0) : 0,
       business: formData.business ? 1 : 0,
-      business_hours: Number(formData.business_hours) || 0,
+      business_hours: formData.business ? (Number(formData.business_hours) || 0) : 0,
       girls: formData.girls ? 1 : 0,
-      girls_nice: formData.girls_nice ? 1 : 0,
+      girls_nice: formData.girls ? (formData.girls_nice ? 1 : 0) : 0,
       reading: formData.reading ? 1 : 0,
-      reading_pages: Number(formData.reading_pages) || 0,
+      reading_pages: formData.reading ? (Number(formData.reading_pages) || 0) : 0,
       money: formData.money ? 1 : 0,
-      money_amount: Number(formData.money_amount) || 0
+      money_amount: formData.money ? (Number(formData.money_amount) || 0) : 0
     };
     onSave(dataToSave);
   };
