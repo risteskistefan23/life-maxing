@@ -75,23 +75,25 @@ export default function Dashboard({ date, entry, onSave, todayDate }) {
       gym: formData.gym ? 1 : 0,
       cardio: formData.cardio ? 1 : 0,
       faculty: formData.faculty ? 1 : 0,
-      faculty_hours: formData.faculty_hours,
+      faculty_hours: Number(formData.faculty_hours) || 0,
       business: formData.business ? 1 : 0,
-      business_hours: formData.business_hours,
+      business_hours: Number(formData.business_hours) || 0,
       girls: formData.girls ? 1 : 0,
       girls_nice: formData.girls_nice ? 1 : 0,
       reading: formData.reading ? 1 : 0,
-      reading_pages: formData.reading_pages,
+      reading_pages: Number(formData.reading_pages) || 0,
       money: formData.money ? 1 : 0,
-      money_amount: formData.money_amount
+      money_amount: Number(formData.money_amount) || 0
     };
     onSave(dataToSave);
   };
 
+  // Keep the raw typed string in state (not parsed to a number on every
+  // keystroke) — otherwise clearing the field to type a new value snaps
+  // straight back to 0 before the user can type anything.
   const handleNumberChange = (field, value) => {
     if (isLocked) return;
-    const updated = { ...formData, [field]: parseFloat(value) || 0 };
-    setFormData(updated);
+    setFormData(prev => ({ ...prev, [field]: value }));
   };
 
   const getDailyGoals = () => {
