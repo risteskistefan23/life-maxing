@@ -7,7 +7,6 @@ const DEFAULT_GOALS = {
   faculty: 4,
   business: 10,
   girls: 3,
-  girlsNice: 2,
   reading: 100,
   money: 100
 };
@@ -65,7 +64,6 @@ export default function WeeklyStats({ currentDate }) {
         faculty: entries.reduce((sum, e) => sum + (e.faculty_hours || 0), 0),
         business: entries.reduce((sum, e) => sum + (e.business_hours || 0), 0),
         girls: entries.filter(e => e.girls === 1).length,
-        girlsNice: entries.filter(e => e.girls_nice === 1).length,
         reading: entries.reduce((sum, e) => sum + (e.reading_pages || 0), 0),
         money: entries.reduce((sum, e) => sum + (e.money_amount || 0), 0),
       };
@@ -101,12 +99,11 @@ export default function WeeklyStats({ currentDate }) {
   if (!stats) return <div className="weekly-stats">Вчитување...</div>;
 
   const metrics = [
-    { key: 'gym', label: 'Сала/Утези', unit: 'денови' },
+    { key: 'gym', label: 'Шипки/Теретана', unit: 'денови' },
     { key: 'cardio', label: 'Кардио/10.000 чекори', unit: 'денови' },
     { key: 'faculty', label: 'Учење факултет', unit: 'часови' },
     { key: 'business', label: 'Бизнис/Работа', unit: 'часови' },
-    { key: 'girls', label: 'Девојки (излегување)', unit: 'пати' },
-    { key: 'girlsNice', label: 'Девојки (лиубезни работи)', unit: 'пати' },
+    { key: 'girls', label: 'Девојка (излегување)', unit: 'пати' },
     { key: 'reading', label: 'Читање', unit: 'страни' },
     { key: 'money', label: 'Пари заработени', unit: '$' }
   ];
