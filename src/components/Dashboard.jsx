@@ -205,7 +205,7 @@ export default function Dashboard({ date, entry, onSave, todayDate }) {
             </div>
             {formData.faculty && (
               <div className="nested-question">
-                <label>Колку часа учевте?</label>
+                <label>Колку саати учеше?</label>
                 <input
                   type="number"
                   step="0.5"
@@ -240,7 +240,7 @@ export default function Dashboard({ date, entry, onSave, todayDate }) {
             </div>
             {formData.business && (
               <div className="nested-question">
-                <label>Колку часа работевте?</label>
+                <label>Колку саати работеше?</label>
                 <input
                   type="number"
                   step="0.5"
@@ -317,7 +317,7 @@ export default function Dashboard({ date, entry, onSave, todayDate }) {
             </div>
             {formData.reading && (
               <div className="nested-question">
-                <label>Колку страници прочитавте?</label>
+                <label>Колку страни прочита?</label>
                 <input
                   type="number"
                   min="0"
