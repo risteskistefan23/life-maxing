@@ -459,11 +459,6 @@ body {
   border-color: var(--accent);
 }
 
-.hours-input {
-  margin-left: 30px;
-  margin-top: 10px;
-}
-
 .nested-label {
   margin-left: 30px;
   margin-top: 10px;
@@ -833,8 +828,7 @@ body {
     align-items: stretch;
   }
 
-  .nested-question,
-  .hours-input {
+  .nested-question {
     margin-left: 0;
   }
 

@@ -144,7 +144,7 @@ export default function Dashboard({ date, entry, onSave, todayDate }) {
 
           {/* Q1: Gym */}
           <div className="form-group">
-            <label>1. Дали отидовте во сала/утези?</label>
+            <label>1. Дали бевте денес на шипки/теретана?</label>
             <div className="yes-no-buttons">
               <button
                 type="button"
@@ -204,16 +204,18 @@ export default function Dashboard({ date, entry, onSave, todayDate }) {
               </button>
             </div>
             {formData.faculty && (
-              <input
-                type="number"
-                step="0.5"
-                min="0"
-                value={formData.faculty_hours}
-                onChange={(e) => handleNumberChange('faculty_hours', e.target.value)}
-                placeholder="Часови"
-                className="hours-input"
-                disabled={isLocked}
-              />
+              <div className="nested-question">
+                <label>Колку часа учевте?</label>
+                <input
+                  type="number"
+                  step="0.5"
+                  min="0"
+                  value={formData.faculty_hours}
+                  onChange={(e) => handleNumberChange('faculty_hours', e.target.value)}
+                  placeholder="Часови"
+                  disabled={isLocked}
+                />
+              </div>
             )}
           </div>
 
@@ -237,16 +239,18 @@ export default function Dashboard({ date, entry, onSave, todayDate }) {
               </button>
             </div>
             {formData.business && (
-              <input
-                type="number"
-                step="0.5"
-                min="0"
-                value={formData.business_hours}
-                onChange={(e) => handleNumberChange('business_hours', e.target.value)}
-                placeholder="Часови"
-                className="hours-input"
-                disabled={isLocked}
-              />
+              <div className="nested-question">
+                <label>Колку часа работевте?</label>
+                <input
+                  type="number"
+                  step="0.5"
+                  min="0"
+                  value={formData.business_hours}
+                  onChange={(e) => handleNumberChange('business_hours', e.target.value)}
+                  placeholder="Часови"
+                  disabled={isLocked}
+                />
+              </div>
             )}
           </div>
 
@@ -312,15 +316,17 @@ export default function Dashboard({ date, entry, onSave, todayDate }) {
               </button>
             </div>
             {formData.reading && (
-              <input
-                type="number"
-                min="0"
-                value={formData.reading_pages}
-                onChange={(e) => handleNumberChange('reading_pages', e.target.value)}
-                placeholder="Страни"
-                className="hours-input"
-                disabled={isLocked}
-              />
+              <div className="nested-question">
+                <label>Колку страници прочитавте?</label>
+                <input
+                  type="number"
+                  min="0"
+                  value={formData.reading_pages}
+                  onChange={(e) => handleNumberChange('reading_pages', e.target.value)}
+                  placeholder="Страни"
+                  disabled={isLocked}
+                />
+              </div>
             )}
           </div>
 
