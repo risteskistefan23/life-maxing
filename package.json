@@ -1,0 +1,65 @@
+{
+  "name": "app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "homepage": "./",
+  "proxy": "http://localhost:3001",
+  "scripts": {
+    "react-start": "react-scripts start",
+    "react-build": "react-scripts build",
+    "dev": "npm run react-build && cross-env LM_DEV=1 electron .",
+    "desktop": "electron .",
+    "build": "react-scripts build",
+    "server": "node server.js",
+    "start": "node server.js",
+    "web-dev": "concurrently \"npm run react-start\" \"node server.js\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.29.7",
+    "@babel/preset-react": "^7.29.7",
+    "@electron-forge/cli": "^7.11.2",
+    "@electron-forge/maker-zip": "^7.11.2",
+    "@electron-forge/plugin-webpack": "^7.11.2",
+    "@vercel/webpack-asset-relocator-loader": "^1.10.0",
+    "babel-loader": "^10.1.1",
+    "concurrently": "^10.0.0",
+    "cross-env": "^10.1.0",
+    "css-loader": "^7.1.4",
+    "electron": "^31.7.7",
+    "electron-builder": "^26.8.1",
+    "esbuild": "^0.28.0",
+    "fork-ts-checker-webpack-plugin": "^9.1.0",
+    "html-webpack-plugin": "^5.6.7",
+    "node-loader": "^2.1.0",
+    "react-scripts": "^5.0.1",
+    "style-loader": "^4.0.0",
+    "wait-on": "^9.0.10",
+    "webpack": "^5.107.2",
+    "webpack-cli": "^7.0.3"
+  },
+  "dependencies": {
+    "@libsql/client": "^0.17.4",
+    "dotenv": "^17.4.2",
+    "electron-is-dev": "^3.0.1",
+    "express": "^5.2.1",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6",
+    "sqlite3": "^6.0.1"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
