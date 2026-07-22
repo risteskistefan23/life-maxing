@@ -464,6 +464,29 @@ body {
   margin-top: 10px;
 }
 
+.save-status {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.save-status.saving {
+  color: var(--text-muted);
+}
+
+.save-status.saved {
+  color: var(--accent);
+}
+
+.save-status.error {
+  color: var(--warn);
+}
+
+.apply-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
 .apply-btn {
   padding: 12px 32px;
   background: linear-gradient(90deg, var(--accent-dark), var(--accent));

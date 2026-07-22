@@ -31,15 +31,14 @@ export default function App() {
   const saveEntry = async (data) => {
     // Only future days are locked — past days and today can be edited.
     if (currentDate > todayDate) return;
-    try {
-      await api.saveDailyEntry(currentDate, data);
-      setEntries(prev => ({
-        ...prev,
-        [currentDate]: data
-      }));
-    } catch (err) {
-      console.error('Failed to save entry:', err);
-    }
+    // Let failures propagate — Dashboard shows the user a visible error
+    // instead of the save silently failing (e.g. while the server is still
+    // waking up from sleep on the free hosting tier).
+    await api.saveDailyEntry(currentDate, data);
+    setEntries(prev => ({
+      ...prev,
+      [currentDate]: data
+    }));
   };
 
   return (

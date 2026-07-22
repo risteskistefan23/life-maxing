@@ -3,6 +3,10 @@ import React, { useState, useEffect } from 'react';
 export default function Dashboard({ date, entry, onSave, todayDate }) {
   const isLocked = date > todayDate;
 
+  // idle | saving | saved | error — visible feedback so a failed save
+  // (e.g. server still waking up from sleep) is never silent.
+  const [saveState, setSaveState] = useState('idle');
+
   const [formData, setFormData] = useState({
     gym: false,
     cardio: false,
@@ -50,6 +54,7 @@ export default function Dashboard({ date, entry, onSave, todayDate }) {
         money_amount: 0
       });
     }
+    setSaveState('idle');
   }, [date, entry]);
 
   const handleYes = (field, e) => {
@@ -70,7 +75,7 @@ export default function Dashboard({ date, entry, onSave, todayDate }) {
     setFormData(prev => ({ ...prev, [field]: false }));
   };
 
-  const handleApply = () => {
+  const handleApply = async () => {
     // If the main question is "Не", any sub-answer typed earlier (before
     // switching away from "Да") must not be saved — otherwise stale hours/
     // pages/amounts sneak into totals for a day where the answer is "No".
@@ -88,7 +93,14 @@ export default function Dashboard({ date, entry, onSave, todayDate }) {
       money: formData.money ? 1 : 0,
       money_amount: formData.money ? (Number(formData.money_amount) || 0) : 0
     };
-    onSave(dataToSave);
+    setSaveState('saving');
+    try {
+      await onSave(dataToSave);
+      setSaveState('saved');
+    } catch (err) {
+      console.error('Failed to save entry:', err);
+      setSaveState('error');
+    }
   };
 
   // Keep the raw typed string in state (not parsed to a number on every
@@ -373,11 +385,17 @@ export default function Dashboard({ date, entry, onSave, todayDate }) {
         {isLocked ? (
           <p className="locked-note">🔒 Не може однапред да се пополнува иден ден.</p>
         ) : (
-          <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '30px' }}>
+          <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '14px', marginTop: '30px' }}>
+            {saveState === 'saving' && <span className="save-status saving">Се зачувува...</span>}
+            {saveState === 'saved' && <span className="save-status saved">✓ Зачувано</span>}
+            {saveState === 'error' && (
+              <span className="save-status error">⚠ Не се зачува — провери интернет и пробај повторно</span>
+            )}
             <button
               type="button"
               className="apply-btn"
               onClick={handleApply}
+              disabled={saveState === 'saving'}
             >
               Примени
             </button>

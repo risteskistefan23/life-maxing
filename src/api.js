@@ -5,15 +5,29 @@
 // server. In production, the server serves this same build, so relative
 // paths hit the right place automatically.
 
-async function request(path, options) {
-  const res = await fetch(path, {
-    headers: { 'Content-Type': 'application/json' },
-    ...options
-  });
-  if (!res.ok) {
-    throw new Error(`API request failed: ${res.status} ${res.statusText}`);
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+// The free hosting tier puts the server to sleep after inactivity, so the
+// first request after opening the app can time out or fail while it wakes
+// up (~20-30s). Retry a couple of times with a short backoff before giving
+// up, instead of failing the very request that's waking the server.
+async function request(path, options, attempt = 0) {
+  try {
+    const res = await fetch(path, {
+      headers: { 'Content-Type': 'application/json' },
+      ...options
+    });
+    if (!res.ok) {
+      throw new Error(`API request failed: ${res.status} ${res.statusText}`);
+    }
+    return await res.json();
+  } catch (err) {
+    if (attempt < 2) {
+      await sleep(4000);
+      return request(path, options, attempt + 1);
+    }
+    throw err;
   }
-  return res.json();
 }
 
 const api = {
