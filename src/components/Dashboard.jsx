@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-export default function Dashboard({ date, entry, onSave, todayDate }) {
+export default function Dashboard({ date, entry, loadStatus, onRetryLoad, onSave, todayDate }) {
   const isLocked = date > todayDate;
 
   // idle | saving | saved | error — visible feedback so a failed save
@@ -131,6 +131,35 @@ export default function Dashboard({ date, entry, onSave, todayDate }) {
     month: 'long',
     day: 'numeric'
   });
+
+  // Never render the form (which would show as an empty day) while a load is
+  // in flight or has failed — the server free tier can take 20-30s+ to wake
+  // up, and a day that merely failed to load must never look identical to a
+  // day with genuinely no entries.
+  if (loadStatus === 'loading') {
+    return (
+      <div className="dashboard">
+        <div className="dashboard-header">
+          <h2>{formattedDate}</h2>
+        </div>
+        <p className="save-status saving">Се вчитува...</p>
+      </div>
+    );
+  }
+
+  if (loadStatus === 'error') {
+    return (
+      <div className="dashboard">
+        <div className="dashboard-header">
+          <h2>{formattedDate}</h2>
+        </div>
+        <p className="save-status error">⚠ Не успеа да се вчита овој ден — провери интернет и пробај повторно. (Оваа порака НЕ значи дека податоците се избришани.)</p>
+        <button type="button" className="apply-btn" onClick={onRetryLoad}>
+          Обиди се повторно
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className={isLocked ? 'dashboard locked' : 'dashboard'}>

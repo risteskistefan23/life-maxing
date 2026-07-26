@@ -9,8 +9,11 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 // The free hosting tier puts the server to sleep after inactivity, so the
 // first request after opening the app can time out or fail while it wakes
-// up (~20-30s). Retry a couple of times with a short backoff before giving
-// up, instead of failing the very request that's waking the server.
+// up (~20-30s, sometimes longer). Retry with a short backoff for up to ~45s
+// before giving up, instead of failing the very request that's waking the
+// server — a load that gives up too early looks identical to missing data.
+const MAX_ATTEMPTS = 9;
+
 async function request(path, options, attempt = 0) {
   try {
     const res = await fetch(path, {
@@ -22,8 +25,8 @@ async function request(path, options, attempt = 0) {
     }
     return await res.json();
   } catch (err) {
-    if (attempt < 2) {
-      await sleep(4000);
+    if (attempt < MAX_ATTEMPTS) {
+      await sleep(5000);
       return request(path, options, attempt + 1);
     }
     throw err;

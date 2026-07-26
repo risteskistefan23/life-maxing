@@ -11,20 +11,27 @@ export default function App() {
   const [currentDate, setCurrentDate] = useState(todayDate);
   const [view, setView] = useState('daily'); // 'daily' or 'weekly'
   const [entries, setEntries] = useState({});
+  // loading | error | done, per date — lets Dashboard tell "failed to load"
+  // apart from "confirmed no entry", so a flaky request while the free-tier
+  // server wakes up never gets displayed as a blank/empty day.
+  const [loadStatus, setLoadStatus] = useState({});
 
   useEffect(() => {
     loadEntry(currentDate);
   }, [currentDate]);
 
   const loadEntry = async (date) => {
+    setLoadStatus(prev => ({ ...prev, [date]: 'loading' }));
     try {
       const entry = await api.getDailyEntry(date);
       setEntries(prev => ({
         ...prev,
         [date]: entry || {}
       }));
+      setLoadStatus(prev => ({ ...prev, [date]: 'done' }));
     } catch (err) {
       console.error('Failed to load entry:', err);
+      setLoadStatus(prev => ({ ...prev, [date]: 'error' }));
     }
   };
 
@@ -74,6 +81,8 @@ export default function App() {
             <Dashboard
               date={currentDate}
               entry={entries[currentDate]}
+              loadStatus={loadStatus[currentDate]}
+              onRetryLoad={() => loadEntry(currentDate)}
               onSave={saveEntry}
               todayDate={todayDate}
             />
