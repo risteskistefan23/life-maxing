@@ -19,6 +19,14 @@ app.use(express.json());
 // not compatible with this code. Real historical data lives in the Electron
 // app's %APPDATA%\app\life-maxing.db and is migrated separately (see
 // scripts/export-data.js + scripts/import-data.js).
+// Render's disk is ephemeral — if DATABASE_URL isn't set there, saves silently
+// go to a local file that gets wiped on every restart/deploy, and users only
+// notice when their data has already vanished. Refuse to start that way.
+if (process.env.RENDER && !process.env.DATABASE_URL) {
+  console.error('DATABASE_URL is not set. Add DATABASE_URL and DATABASE_AUTH_TOKEN in the Render dashboard (Environment tab) so data persists in Turso instead of the ephemeral local disk.');
+  process.exit(1);
+}
+
 const dbUrl = process.env.DATABASE_URL || `file:${path.join(__dirname, '..', 'data', 'lifemax-web.db')}`;
 const db = createClient({
   url: dbUrl,
